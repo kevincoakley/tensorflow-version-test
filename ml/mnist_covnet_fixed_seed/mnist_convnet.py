@@ -7,10 +7,17 @@ Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 """
 
 """
+2022/03/15 - kevincoakley
+Fix the random seed for reproducible results with Keras
+"""
+
+"""
 ## Setup
 """
 
 import numpy as np
+from numpy.random import seed
+import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
@@ -21,6 +28,11 @@ from tensorflow.keras import layers
 # Model / data parameters
 num_classes = 10
 input_shape = (28, 28, 1)
+
+# Fix the random seed for reproducible results with Keras
+seed_val = 1
+seed(seed_val)
+tf.random.set_seed(seed_val)
 
 # the data, split between train and test sets
 (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
