@@ -2,7 +2,7 @@
 Title: Simple MNIST convnet
 Author: [fchollet](https://twitter.com/fchollet)
 Date created: 2015/06/19
-Last modified: 2022/03/15 (kevincoakley)
+Last modified: 2022/03/16 (kevincoakley)
 Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 """
 
@@ -10,10 +10,9 @@ Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 ## Setup
 """
 
-import sys
+import sys, random
 from datetime import datetime
 import numpy as np
-from numpy.random import seed
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -26,11 +25,6 @@ def simple_mnist_covnet():
     # Model / data parameters
     num_classes = 10
     input_shape = (28, 28, 1)
-
-    # Fix the random seed for reproducible results with Keras
-    seed_val = 1
-    seed(seed_val)
-    tf.random.set_seed(seed_val)
 
     # the data, split between train and test sets
     (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
@@ -110,6 +104,18 @@ def save_score(test_loss, test_accuracy, epochs):
 
 
 if __name__ == '__main__':
+    # Fix the random seed for reproducible results with Keras
+    seed_val = 1
+
+    if float(tf.version.VERSION[0:3]) >= 2.7:
+        # Sets all random seeds for the program (Python, NumPy, and TensorFlow).
+        # Supported in TF 2.7.0+
+        tf.keras.utils.set_random_seed(seed_val)
+    else:
+        # for TF < 2.7
+        random.seed(seed_val)
+        np.random.seed(seed_val)
+        tf.random.set_seed(seed_val)
 
     # Configures TensorFlow ops to run deterministically to enable reproducible 
     # results with GPUs (Supported in TF 2.8.0+)
