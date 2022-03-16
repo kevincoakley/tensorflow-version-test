@@ -101,8 +101,8 @@ def save_score(test_loss, test_accuracy, epochs):
     f.write("======================\n")
     f.write("%s\n" % datetime.now())
     f.write("Python: %s\n" % sys.version)
-    f.write("Tensorflow version: %s\n" % tf.version.VERSION)
-    f.write("Tensorflow compiler version: %s\n" % tf.version.COMPILER_VERSION)
+    f.write("TensorFlow version: %s\n" % tf.version.VERSION)
+    f.write("TensorFlow compiler version: %s\n" % tf.version.COMPILER_VERSION)
     f.write("Epochs: %d \n" % epochs)
     f.write("Test loss: %0.16f\n" % (test_loss))
     f.write("Test accuracy: %0.16f\n" % (test_accuracy))
@@ -110,6 +110,12 @@ def save_score(test_loss, test_accuracy, epochs):
 
 
 if __name__ == '__main__':
+
+    # Configures TensorFlow ops to run deterministically to enable reproducible 
+    # results with GPUs (Supported in TF 2.8.0+)
+    if float(tf.version.VERSION[0:3]) >= 2.8:
+        tf.config.experimental.enable_op_determinism()
+
     for x in range(5):
         print("\nMNIST Covnet Count: %s\n======================\n" % str(x + 1))
         test_loss, test_accuracy, epochs = simple_mnist_covnet()
