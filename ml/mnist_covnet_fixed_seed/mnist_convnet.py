@@ -10,6 +10,8 @@ Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 ## Setup
 """
 
+import sys
+from datetime import datetime
 import numpy as np
 from numpy.random import seed
 import tensorflow as tf
@@ -85,8 +87,30 @@ def simple_mnist_covnet():
     score = model.evaluate(x_test, y_test, verbose=0)
     print("Test loss:", score[0])
     print("Test accuracy:", score[1])
+    
+    return score[0], score[1], epochs
+
+
+def save_score(test_loss, test_accuracy, epochs):
+    output_file = "fixed_scores.txt"
+
+    if len(sys.argv) >= 2:
+      output_file = "fixed_scores_%s.txt" % (sys.argv[1])
+
+    f = open(output_file, 'a')
+    f.write("======================\n")
+    f.write("%s\n" % datetime.now())
+    f.write("Python: %s\n" % sys.version)
+    f.write("Tensorflow version: %s\n" % tf.version.VERSION)
+    f.write("Tensorflow compiler version: %s\n" % tf.version.COMPILER_VERSION)
+    f.write("Epochs: %d \n" % epochs)
+    f.write("Test loss: %0.16f\n" % (test_loss))
+    f.write("Test accuracy: %0.16f\n" % (test_accuracy))
+    f.close()
+
 
 if __name__ == '__main__':
     for x in range(5):
-        print("MNIST Covnet Count: %s\n======================\n" % str(x + 1))
-        simple_mnist_covnet()
+        print("\nMNIST Covnet Count: %s\n======================\n" % str(x + 1))
+        test_loss, test_accuracy, epochs = simple_mnist_covnet()
+        save_score(test_loss, test_accuracy, epochs)
