@@ -19,9 +19,31 @@ from tensorflow.keras import layers
 
 def simple_mnist_covnet():
     """
-    ## Prepare the data
+    ## Configure Tensorflow for reproducible results
     """
 
+    # Fix the random seed for reproducible results with Keras
+    seed_val = 1
+
+    if float(tf.version.VERSION[0:3]) >= 2.7:
+        # Sets all random seeds for the program (Python, NumPy, and TensorFlow).
+        # Supported in TF 2.7.0+
+        tf.keras.utils.set_random_seed(seed_val)
+    else:
+        # for TF < 2.7
+        random.seed(seed_val)
+        np.random.seed(seed_val)
+        tf.random.set_seed(seed_val)
+
+    # Configures TensorFlow ops to run deterministically to enable reproducible 
+    # results with GPUs (Supported in TF 2.8.0+)
+    if float(tf.version.VERSION[0:3]) >= 2.8:
+        tf.config.experimental.enable_op_determinism()
+
+    """
+    ## Prepare the data
+    """
+    
     # Model / data parameters
     num_classes = 10
     input_shape = (28, 28, 1)
@@ -104,23 +126,6 @@ def save_score(test_loss, test_accuracy, epochs):
 
 
 if __name__ == '__main__':
-    # Fix the random seed for reproducible results with Keras
-    seed_val = 1
-
-    if float(tf.version.VERSION[0:3]) >= 2.7:
-        # Sets all random seeds for the program (Python, NumPy, and TensorFlow).
-        # Supported in TF 2.7.0+
-        tf.keras.utils.set_random_seed(seed_val)
-    else:
-        # for TF < 2.7
-        random.seed(seed_val)
-        np.random.seed(seed_val)
-        tf.random.set_seed(seed_val)
-
-    # Configures TensorFlow ops to run deterministically to enable reproducible 
-    # results with GPUs (Supported in TF 2.8.0+)
-    if float(tf.version.VERSION[0:3]) >= 2.8:
-        tf.config.experimental.enable_op_determinism()
 
     for x in range(5):
         print("\nMNIST Covnet Count: %s\n======================\n" % str(x + 1))
