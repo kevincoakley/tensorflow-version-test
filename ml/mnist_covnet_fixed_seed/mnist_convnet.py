@@ -2,7 +2,7 @@
 Title: Simple MNIST convnet
 Author: [fchollet](https://twitter.com/fchollet)
 Date created: 2015/06/19
-Last modified: 2022/03/16 (kevincoakley)
+Last modified: 2022/03/19 (kevincoakley)
 Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 """
 
@@ -10,12 +10,14 @@ Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 ## Setup
 """
 
-import sys, random
+import csv, os, random, sys
 from datetime import datetime
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+
+script_version = "1.0.0"
 
 def simple_mnist_covnet():
     """
@@ -108,21 +110,27 @@ def simple_mnist_covnet():
 
 
 def save_score(test_loss, test_accuracy, epochs):
-    output_file = "fixed_scores.txt"
+    csv_file = "mnist_convnet.csv"
+    run_name = ""
+    write_header = False
 
     if len(sys.argv) >= 2:
-      output_file = "fixed_scores_%s.txt" % (sys.argv[1])
+      run_name = sys.argv[1]
 
-    f = open(output_file, 'a')
-    f.write("======================\n")
-    f.write("%s\n" % datetime.now())
-    f.write("Python: %s\n" % sys.version)
-    f.write("TensorFlow version: %s\n" % tf.version.VERSION)
-    f.write("TensorFlow compiler version: %s\n" % tf.version.COMPILER_VERSION)
-    f.write("Epochs: %d \n" % epochs)
-    f.write("Test loss: %0.16f\n" % (test_loss))
-    f.write("Test accuracy: %0.16f\n" % (test_accuracy))
-    f.close()
+    if not os.path.isfile(csv_file):
+        write_header = True
+      
+    with open(csv_file, "a") as csvfile:
+        fieldnames = ["run_name", "script_version", "date_time", "python_version", "tensorflow_version",
+        "tensorflow_compiler_version", "epochs", "test_loss", "test_accuracy"]
+        
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        if write_header:
+            writer.writeheader()
+
+        writer.writerow({"run_name": run_name, "script_version": script_version, "date_time": datetime.now(), "python_version": sys.version, "tensorflow_version": tf.version.VERSION,
+        "tensorflow_compiler_version": tf.version.COMPILER_VERSION, "epochs": epochs, "test_loss": test_loss, "test_accuracy": test_accuracy})
 
 
 if __name__ == '__main__':
