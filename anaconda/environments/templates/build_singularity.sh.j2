@@ -1,0 +1,5 @@
+#!/bin/bash
+
+{% for test_variables in test_versions %}
+sudo singularity build miniconda-tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }}.sif miniconda-tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }}.def
+{% endfor %}

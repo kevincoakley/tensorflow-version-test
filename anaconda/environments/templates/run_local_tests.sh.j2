@@ -1,0 +1,14 @@
+#!/bin/bash
+
+eval "$(conda shell.bash hook)"
+
+{% for test_variables in test_versions %}
+conda env create -n tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }} --file environment-tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }}.yml
+conda activate tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }}
+conda list > conda-list-tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }}
+python ./mnist_convnet.py mnist-convnet-conda-tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }}
+conda deactivate
+conda env remove -n tf{{ test_variables.tensorflow_version }}-py{{ test_variables.python_version }}-{{ test_variables.math_library }}
+conda clean -a -y
+
+{% endfor %}

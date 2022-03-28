@@ -1,0 +1,41 @@
+Bootstrap: docker
+From: ubuntu:20.04
+
+%setup
+    if [ ! -e Miniconda3-py39_4.11.0-Linux-x86_64.sh ]
+    then
+        curl -O https://repo.anaconda.com/miniconda/Miniconda3-py39_4.11.0-Linux-x86_64.sh
+    fi
+
+%files
+    Miniconda3-py39_4.11.0-Linux-x86_64.sh /opt/miniconda.sh
+    environment-tf{{ tensorflow_version }}-py{{ python_version }}-{{ math_library }}.yml /opt/env.yml
+
+%environment
+    DEBIAN_FRONTEND=noninteractive
+    # See http://bugs.python.org/issue19846
+    LANG=C.UTF-8
+    # Activate the TensorFlow environment when starting the container
+    source /opt/conda/etc/profile.d/conda.sh
+    conda activate tensorflow
+
+%post
+    # Install Miniconda
+    /bin/bash /opt/miniconda.sh -b -p /opt/conda
+    rm /opt/miniconda.sh
+    
+    # Create an environment for TensorFlow
+    /opt/conda/bin/conda env create -n tensorflow --file /opt/env.yml
+
+    # Clean up Anaconda
+    find /opt/conda/ -follow -type f -name '*.a' -delete 
+    find /opt/conda/ -follow -type f -name '*.js.map' -delete 
+    /opt/conda/bin/conda clean -afy
+
+%labels
+    Author kcoakley@sdsc.edu
+    Version v1.0.0
+
+%help
+    Ubuntu 20.04 - Miniconda 4.11.0 - Python {{ python_version }} - TensorFlow {{ tensorflow_version }} - {{ math_library }}
+    based on https://github.com/ContinuumIO/docker-images

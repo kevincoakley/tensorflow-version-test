@@ -1,0 +1,5 @@
+environment-*
+run_local_tests.sh
+*.def
+build_singularity.sh
+run_singularity_tests.sh

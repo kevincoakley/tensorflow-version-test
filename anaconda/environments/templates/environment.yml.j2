@@ -1,0 +1,10 @@
+---
+name: {{ tensorflow_version }}-{{ python_version }}-{{ math_library }}
+channels:
+  - conda-forge
+dependencies:
+  - python={{ python_version }}
+  - tensorflow={{ tensorflow_version }}={{ math_library }}*
+{% for dependency in dependencies %}
+  - {{ dependency }}
+{% endfor %}
