@@ -8,7 +8,7 @@ with open("test_versions.yml") as f:
     test_versions = yaml.safe_load(f)
 
 # Use a jinja template to create the Singularity defintion files
-env = Environment(loader=FileSystemLoader("templates"))
+env = Environment(loader=FileSystemLoader("templates"), trim_blocks=True,  lstrip_blocks=True)
 template = env.get_template("singularity.def.j2")
 
 for test_variables in test_versions:
