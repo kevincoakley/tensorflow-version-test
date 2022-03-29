@@ -1,0 +1,5 @@
+#!/bin/bash
+
+{% for test_variables in test_versions %}
+singularity exec ubuntu-cpu-{{ test_variables.ubuntu_version }}-tf{{ test_variables.tensorflow_version }}.sif python scriptname.py ubuntu-cpu-{{ test_variables.ubuntu_version }}-tf{{ test_variables.tensorflow_version }}
+{% endfor %}

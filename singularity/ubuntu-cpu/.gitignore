@@ -1,0 +1,3 @@
+*.def
+build_singularity.sh
+run_singularity_tests.sh

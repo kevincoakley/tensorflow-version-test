@@ -1,0 +1,5 @@
+#!/bin/bash
+
+{% for test_variables in test_versions %}
+sudo singularity build ubuntu-cpu-{{ test_variables.ubuntu_version }}-tf{{ test_variables.tensorflow_version }}.sif ubuntu-cpu-{{ test_variables.ubuntu_version }}-tf{{ test_variables.tensorflow_version }}.def
+{% endfor %}

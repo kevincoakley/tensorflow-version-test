@@ -1,0 +1,31 @@
+---
+- ubuntu_version: 18.04
+  tensorflow_version: 2.1.4
+- ubuntu_version: 18.04
+  tensorflow_version: 2.2.3
+- ubuntu_version: 18.04
+  tensorflow_version: 2.3.4
+- ubuntu_version: 18.04
+  tensorflow_version: 2.4.4
+- ubuntu_version: 18.04
+  tensorflow_version: 2.5.2
+- ubuntu_version: 18.04
+  tensorflow_version: 2.6.2
+
+- ubuntu_version: 20.04
+  tensorflow_version: 2.2.3
+- ubuntu_version: 20.04
+  tensorflow_version: 2.3.4
+- ubuntu_version: 20.04
+  tensorflow_version: 2.4.4
+- ubuntu_version: 20.04
+  tensorflow_version: 2.5.2
+- ubuntu_version: 20.04
+  tensorflow_version: 2.6.2
+- ubuntu_version: 20.04
+  tensorflow_version: 2.7.1
+- ubuntu_version: 20.04
+  tensorflow_version: 2.8.0
+
+- ubuntu_version: 22.04
+  tensorflow_version: 2.8.0
