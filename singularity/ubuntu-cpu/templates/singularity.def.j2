@@ -13,11 +13,11 @@ From: ubuntu:{{ ubuntu_version }}
     # Some TF tools expect a "python" binary
     ln -s $(which python3) /usr/local/bin/python
     # Install TF {{ tensorflow_version }}
-    python3 -m pip install --no-cache-dir tensorflow-cpu=={{ tensorflow_version }}
+    python3 -m pip install --no-cache-dir tensorflow-cpu=={{ tensorflow_version }} pyyaml xmltodict
 
 %labels
     Author kcoakley@sdsc.edu
-    Version v1.0.0
+    Version v1.0.1
 
 %help
     Ubuntu {{ ubuntu_version }} - TensorFlow {{ tensorflow_version }}
