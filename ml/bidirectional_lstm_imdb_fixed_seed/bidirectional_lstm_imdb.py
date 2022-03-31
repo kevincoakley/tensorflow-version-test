@@ -2,21 +2,21 @@
 Title: Bidirectional LSTM on IMDB
 Author: [fchollet](https://twitter.com/fchollet)
 Date created: 2020/05/03
-Last modified: 2022/03/25 (kevincoakley)
+Last modified: 2022/03/30 (kevincoakley)
 Description: Train a 2-layer bidirectional LSTM on the IMDB movie review sentiment classification dataset.
 """
 """
 ## Setup
 """
 
-import csv, os, random, sys
+import csv, os, random, sys, yaml
 from datetime import datetime 
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-script_version = "1.0.0"
+script_version = "1.1.0"
 max_features = 20000  # Only consider the top 20k words
 maxlen = 200  # Only consider the first 200 words of each movie review
 
@@ -96,6 +96,20 @@ def bidirectional_lstm_imdb():
 
     return score[0], score[1], epochs
 
+
+def get_system_info():
+    if os.path.exists("system_info.py"):
+        import system_info
+        sysinfo = system_info.get_system_info()
+
+        with open("bidirectional_lstm_imdb_system_info.yaml", "w") as system_info_file:
+            yaml.dump(sysinfo, system_info_file, default_flow_style=False)
+
+        return sysinfo
+    else:
+        return None
+
+
 def save_score(test_loss, test_accuracy, epochs):
     csv_file = "bidirectional_lstm_imdb.csv"
     run_name = ""
@@ -120,6 +134,8 @@ def save_score(test_loss, test_accuracy, epochs):
         "tensorflow_compiler_version": tf.version.COMPILER_VERSION, "epochs": epochs, "test_loss": test_loss, "test_accuracy": test_accuracy})
 
 if __name__ == '__main__':
+
+    system_info = get_system_info()
 
     for x in range(5):
         print("\nBidirectional LSTM on IMDB Count: %s\n======================\n" % str(x + 1))

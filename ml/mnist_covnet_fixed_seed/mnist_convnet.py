@@ -2,7 +2,7 @@
 Title: Simple MNIST convnet
 Author: [fchollet](https://twitter.com/fchollet)
 Date created: 2015/06/19
-Last modified: 2022/03/19 (kevincoakley)
+Last modified: 2022/03/30 (kevincoakley)
 Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 """
 
@@ -10,14 +10,14 @@ Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 ## Setup
 """
 
-import csv, os, random, sys
+import csv, os, random, sys, yaml
 from datetime import datetime
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-script_version = "1.0.0"
+script_version = "1.1.0"
 
 def simple_mnist_covnet():
     """
@@ -109,6 +109,19 @@ def simple_mnist_covnet():
     return score[0], score[1], epochs
 
 
+def get_system_info():
+    if os.path.exists("system_info.py"):
+        import system_info
+        sysinfo = system_info.get_system_info()
+
+        with open("mnist_convnet_system_info.yaml", "w") as system_info_file:
+            yaml.dump(sysinfo, system_info_file, default_flow_style=False)
+
+        return sysinfo
+    else:
+        return None
+
+
 def save_score(test_loss, test_accuracy, epochs):
     csv_file = "mnist_convnet.csv"
     run_name = ""
@@ -134,6 +147,8 @@ def save_score(test_loss, test_accuracy, epochs):
 
 
 if __name__ == '__main__':
+
+    system_info = get_system_info()
 
     for x in range(5):
         print("\nMNIST Covnet Count: %s\n======================\n" % str(x + 1))
