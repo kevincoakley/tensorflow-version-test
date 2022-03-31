@@ -38,7 +38,6 @@ def get_cpu_info():
 
         return cpu_info
     else:
-        print("%s does not exist." % proc_cpuinfo_file)
         return None
     
 
