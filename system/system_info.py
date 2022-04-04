@@ -8,7 +8,7 @@ import sysconfig
 import xmltodict
 
 
-version = "1.0.0"
+version = "1.1.0"
 
 def get_cpu_info():
     proc_cpuinfo_file = "/proc/cpuinfo"
@@ -101,6 +101,15 @@ def get_dmi_info():
         return dmi_info
 
 
+def get_environ_info():
+    environ_info = {}
+
+    for key, value in os.environ.items():
+        environ_info[key] = value
+    
+    return environ_info
+
+
 def get_system_info():
     system_info = {}
 
@@ -110,6 +119,7 @@ def get_system_info():
     system_info["dmi"] = get_dmi_info()
     system_info["os"] = get_os_info()
     system_info["python"] = sysconfig.get_config_vars()
+    system_info["env"] = get_environ_info()
 
     return system_info
 
