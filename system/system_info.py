@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import datetime
 import pprint
 import os
 import shutil
@@ -8,7 +9,7 @@ import sysconfig
 import xmltodict
 
 
-version = "1.1.0"
+version = "1.2.0"
 
 def get_cpu_info():
     proc_cpuinfo_file = "/proc/cpuinfo"
@@ -113,7 +114,9 @@ def get_environ_info():
 def get_system_info():
     system_info = {}
 
+    system_info["datetime"] = str(datetime.datetime.now())
     system_info["version"] = version
+    system_info["hostname"] = os.uname()[1]
     system_info["cpu"] = get_cpu_info()
     system_info["gpu"] = get_gpu_info()
     system_info["dmi"] = get_dmi_info()
