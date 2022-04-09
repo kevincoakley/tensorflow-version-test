@@ -2,7 +2,7 @@
 Title: Simple MNIST convnet
 Author: [fchollet](https://twitter.com/fchollet)
 Date created: 2015/06/19
-Last modified: 2022/03/30 (kevincoakley)
+Last modified: 2022/04/07 (kevincoakley)
 Description: A simple convnet that achieves ~99% test accuracy on MNIST.
 """
 
@@ -17,9 +17,9 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
-script_version = "1.1.0"
+script_version = "1.2.0"
 
-def simple_mnist_covnet():
+def simple_mnist_covnet(run_number):
     """
     ## Configure Tensorflow for reproducible results
     """
@@ -105,8 +105,20 @@ def simple_mnist_covnet():
     score = model.evaluate(x_test, y_test, verbose=0)
     print("Test loss:", score[0])
     print("Test accuracy:", score[1])
-    
-    return score[0], score[1], epochs
+
+    """
+    ## Save the model
+    """
+    run_name = os.path.basename(sys.argv[0]).split('.')[0]
+
+    if len(sys.argv) >= 2:
+      run_name = run_name + "_" + sys.argv[1]
+
+    y_predicted = model.predict(x_test)
+    np.save(run_name + "_predict_" + str(run_number) + ".npy", y_predicted)
+    model.save(run_name + "_model_" + str(run_number) + ".h5")
+
+    return model, score[0], score[1], epochs
 
 
 def get_system_info():
@@ -123,7 +135,7 @@ def get_system_info():
 
 
 def save_score(test_loss, test_accuracy, epochs):
-    csv_file = "mnist_convnet.csv"
+    csv_file = os.path.basename(sys.argv[0]).split('.')[0] + ".csv"
     run_name = ""
     write_header = False
 
@@ -152,5 +164,5 @@ if __name__ == '__main__':
 
     for x in range(5):
         print("\nMNIST Covnet Count: %s\n======================\n" % str(x + 1))
-        test_loss, test_accuracy, epochs = simple_mnist_covnet()
+        model, test_loss, test_accuracy, epochs = simple_mnist_covnet(x + 1)
         save_score(test_loss, test_accuracy, epochs)

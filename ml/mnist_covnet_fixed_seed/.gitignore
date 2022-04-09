@@ -1,2 +1,4 @@
-mnist_convnet.csv
-mnist_convnet_system_info.yaml
+*.csv
+*.yaml
+*.h5
+*.npy
