@@ -1,4 +1,4 @@
-creditcard.csv
+*.csv
+*.yaml
 *.h5
-imbalanced_classification.csv
-imbalanced_classification_system_info.yaml
+*.npy

@@ -2,7 +2,7 @@
 Title: Imbalanced classification: credit card fraud detection
 Author: [fchollet](https://twitter.com/fchollet)
 Date created: 2019/05/28
-Last modified: 2022/03/31 (kevincoakley)
+Last modified: 2022/04/09 (kevincoakley)
 Description: Demonstration of how to handle highly imbalanced classification problems.
 """
 """
@@ -23,10 +23,10 @@ from datetime import datetime
 import numpy as np
 import tensorflow as tf
 
-script_version = "1.1.0"
+script_version = "1.2.0"
 
 
-def imbalanced_classification():
+def imbalanced_classification(run_number):
     """
     ## Configure Tensorflow for reproducible results
     """
@@ -136,7 +136,7 @@ def imbalanced_classification():
         optimizer=keras.optimizers.Adam(1e-2), loss="binary_crossentropy", metrics=["accuracy"]
     )
 
-    callbacks = [keras.callbacks.ModelCheckpoint("fraud_model_at_epoch_{epoch}.h5")]
+    #callbacks = [keras.callbacks.ModelCheckpoint("fraud_model_at_epoch_{epoch}.h5")]
     class_weight = {0: weight_for_0, 1: weight_for_1}
 
     epochs = 30
@@ -147,7 +147,7 @@ def imbalanced_classification():
         batch_size=2048,
         epochs=epochs,
         verbose=2,
-        callbacks=callbacks,
+        #callbacks=callbacks,
         validation_data=(val_features, val_targets),
         class_weight=class_weight,
     )
@@ -156,6 +156,18 @@ def imbalanced_classification():
 
     print("Test loss:", score[0])
     print("Test accuracy:", score[1])
+
+    """
+    ## Save the model
+    """
+    run_name = os.path.basename(sys.argv[0]).split('.')[0]
+
+    if len(sys.argv) >= 2:
+      run_name = run_name + "_" + sys.argv[1]
+
+    features_predicted = model.predict(val_features)
+    np.save(run_name + "_predict_" + str(run_number) + ".npy", features_predicted)
+    model.save(run_name + "_model_" + str(run_number) + ".h5")
 
     return score[0], score[1], epochs
 
@@ -174,7 +186,7 @@ def get_system_info():
 
 
 def save_score(test_loss, test_accuracy, epochs):
-    csv_file = "imbalanced_classification.csv"
+    csv_file = os.path.basename(sys.argv[0]).split('.')[0] + ".csv"
     run_name = ""
     write_header = False
 
@@ -203,7 +215,7 @@ if __name__ == '__main__':
 
     for x in range(5):
         print("\nImbalanced Classification Count: %s\n======================\n" % str(x + 1))
-        test_loss, test_accuracy, epochs = imbalanced_classification()
+        test_loss, test_accuracy, epochs = imbalanced_classification(x + 1)
         save_score(test_loss, test_accuracy, epochs)
 
 """
