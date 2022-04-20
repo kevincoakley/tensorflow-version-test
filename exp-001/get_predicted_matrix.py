@@ -124,7 +124,9 @@ def create_heat_map_from_predicted_matrix(
     return ax
 
 
-def create_prediction_data_frame_for_index(prediction_index, tensorflow_results, results_names):
+def create_prediction_data_frame_for_index(
+    prediction_index, tensorflow_results, results_names
+):
     """
     :param: prediction_index: list of indexes that differ in the tensorflow_results
     :param: tensorflow_results: list of confidence values from tensorflow model.predict()
@@ -160,7 +162,7 @@ def create_prediction_barplot_for_index(df, unique_index, col_wrap=3, figsize=(1
     :return: FacetGrid of barplots of the confidence values for each predicted label
     """
     sns.set(rc={"figure.figsize": figsize})
-   
+
     fg = sns.FacetGrid(df, col="Name", col_wrap=col_wrap)
     fg.map_dataframe(sns.barplot, y="Label", x="Predicted Value", orient="h")
 
