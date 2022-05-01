@@ -1,0 +1,27 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/pytorch:22.04-py3
+
+%setup
+    if [ ! -d nnUNet ]
+    then
+        git clone https://github.com/kevincoakley/nnUNet.git
+    fi
+
+    git -C nnUNet checkout 064019f
+
+%files
+    nnUNet /opt/nnUNet
+
+%environment
+    #export OMP_NUM_THREADS=1
+
+%post
+    python3 -m pip install --no-cache-dir matplotlib
+    python3 -m pip install -e /opt/nnUNet 
+
+%labels
+    Author kcoakley@sdsc.edu
+    Version v1.0.0
+
+%help
+    nnU-Net (064019f) via nvcr.io/nvidia/pytorch:22.04-py3
