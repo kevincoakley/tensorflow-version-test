@@ -1,0 +1,26 @@
+Bootstrap: docker
+# https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel_22-04.html#rel_22-04
+From: nvcr.io/nvidia/pytorch:22.04-py3
+
+%setup
+    if [ ! -d nnUNet ]
+    then
+        git clone https://github.com/kevincoakley/nnUNet.git
+    fi
+
+    git -C nnUNet pull origin kc-main
+    git -C nnUNet checkout c0f300c
+
+%files
+    nnUNet /opt/nnUNet
+
+%post
+    python3 -m pip install --no-cache-dir matplotlib pyyaml xmltodict
+    python3 -m pip install -e /opt/nnUNet 
+
+%labels
+    Author kcoakley@sdsc.edu
+    Version v1.0.2
+
+%help
+    nnU-Net (c0f300c) via nvcr.io/nvidia/pytorch:22.04-py3
