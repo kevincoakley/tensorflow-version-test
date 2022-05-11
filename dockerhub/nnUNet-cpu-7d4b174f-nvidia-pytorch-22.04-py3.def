@@ -1,4 +1,5 @@
 Bootstrap: docker
+# https://docs.nvidia.com/deeplearning/frameworks/pytorch-release-notes/rel_22-04.html#rel_22-04
 From: nvcr.io/nvidia/pytorch:22.04-py3
 
 %setup
@@ -7,8 +8,8 @@ From: nvcr.io/nvidia/pytorch:22.04-py3
         git clone https://github.com/kevincoakley/nnUNet.git
     fi
 
-    git -C nnUNet pull origin kc-main
-    git -C nnUNet checkout c3f6d1d
+    git -C nnUNet pull origin kc-main-cpu 
+    git -C nnUNet checkout 7d4b174f
 
 %files
     nnUNet /opt/nnUNet
@@ -19,7 +20,7 @@ From: nvcr.io/nvidia/pytorch:22.04-py3
 
 %labels
     Author kcoakley@sdsc.edu
-    Version v1.0.1
+    Version v1.0.2
 
 %help
-    nnU-Net (c3f6d1d) via nvcr.io/nvidia/pytorch:22.04-py3
+    nnU-Net (7d4b174f) via nvcr.io/nvidia/pytorch:22.04-py3
