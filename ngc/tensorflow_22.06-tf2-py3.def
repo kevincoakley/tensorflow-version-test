@@ -1,0 +1,13 @@
+Bootstrap: docker
+# https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow/tags
+From: nvcr.io/nvidia/tensorflow:22.06-tf2-py3
+
+%post
+    python3 -m pip install --no-cache-dir pyyaml xmltodict
+
+%labels
+    Author kcoakley@sdsc.edu
+    Version v1.0.0
+
+%help
+    NGC TensorFlow 22.06-tf2-py3 with additional packages
